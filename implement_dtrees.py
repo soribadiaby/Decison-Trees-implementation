@@ -52,3 +52,17 @@ def ig(X,j,threshold,criterion='gini'): #fonction a maximiser pour obtenir la me
         return gini(X)-(ll/l)*gini(Xleft)-(lr/l)*gini(Xright)
     elif criterion=='entropy':
         return entropy(X)-(ll/l)*entropy(Xleft)-(lr/l)*entropy(Xright)
+    
+
+#%% classes
+        
+class Node():
+    
+    def __init__(self, feature_idx=0, threshold=0, labels=None, left=None, right=None):
+        self.feature_idx = feature_idx
+        self.threshold = threshold
+        self.labels = labels
+        self.left = left
+        self.right = right
+        
+        
