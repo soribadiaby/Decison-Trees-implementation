@@ -14,36 +14,30 @@ from sklearn.metrics import accuracy_score
 def entropy(y):
     y=np.array(y)
     classes=np.unique(y)
-    #probabilités pour chaque classe    
+    #probabilities for each class   
     p=[y[y==classes[k]].size/y.size for k in range(len(classes))]
     p=np.array(p)
     return -np.sum(p*np.log2(p))    
+
 
 def gini(y):
     y=np.array(y)
     classes=np.unique(y) 
     p=[y[y==classes[k]].size/y.size for k in range(len(classes))]
     p=np.array(p)
-    #indice d'impureté de gini
+    #gini impurity index
     return 1-np.sum(p**2) 
 
-def variance(y):
-    l=len(y)
-    m=np.sum(y)/l
-    return np.sum((y-m)**2)/l
-    
-def mad_median(y):
-    #écart moyen par rapport à la médiane
-    l=len(y)
-    med=np.median(y)
-    return np.sum(abs(y=med))/l
 
-def ig(X,j,threshold,criterion='gini'): #fonction a maximiser pour obtenir la meilleure separation
+def ig(X,j,threshold,criterion='gini'):
+    """
+    Information gain. Function to maximize to get the best split
+    """
     X=np.array(X)
-    #on sépare le jeu de données initial en fonction du seuil et de la variable concernée
+    #we split the data according to the threshold
     Xleft=X[X[:,j]<threshold]
     Xright=X[X[:,j]>=threshold]
-    #calcul du nombre d'entrées dans chacun des jeux de données
+    #length of the origial data and length of each split
     l=X.shape[0]
     ll=Xleft.shape[0]
     lr=Xright.shape[0]
@@ -58,11 +52,26 @@ def ig(X,j,threshold,criterion='gini'): #fonction a maximiser pour obtenir la me
         
 class Node():
     
-    def __init__(self, feature_idx=0, threshold=0, labels=None, left=None, right=None):
+    def __init__(self, feature_idx=0, threshold=0, left=None, right=None):
         self.feature_idx = feature_idx
         self.threshold = threshold
-        self.labels = labels
         self.left = left
         self.right = right
+
+
+class DecisionTreeCustom(BaseEstimator):
+    def __init__(self, max_depth = None, min_samples_split = None,
+                 criterion='gini'):
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.criterion = criterion
+ 
+    
+    def fit(self, X,y):
+        ...
+           
+    def predict_proba(self, X):
+        ...
         
-        
+    def predict(self, X):
+        ...
