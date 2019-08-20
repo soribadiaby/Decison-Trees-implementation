@@ -7,6 +7,7 @@ Created on Mon Jan 14 14:58:11 2019
 import numpy as np
 from sklearn.base import BaseEstimator
 
+
 def entropy(y):
     y=np.array(y)
     classes=np.unique(y)
@@ -55,15 +56,36 @@ class Node():
 
 
 class DecisionTreeCustom(BaseEstimator):
-    def __init__(self, max_depth = None, min_samples_split = None,
-                 criterion='gini'):
+    def __init__(self, criterion='gini', max_depth=None, min_samples_split=2,
+                 random_state=None):
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.criterion = criterion
- 
+        self.random_state = random_state
+        
     
     def fit(self, X,y):
-        ...
+        depth = 1
+        max_ig = 0 #max information gain
+        n_samples, n_features = X.shape
+        for feature_idx in range(n_features):
+            thresholds = np.unique(X[:,feature_idx])
+            #compute ig values for all possible thresholds
+            ig_values = [ig(X,y,feature_idx,threshold,self.criterion) 
+            for threshold in thresholds]
+            #index of the greatest ig value
+            best_threshold_idx = np.argmax(ig_values)
+            #threshold that give the greatest ig value for this feature
+            best_threshold = thresholds[best_threshold_idx]
+            if max(ig_values)>max_ig:
+                best_feature_idx=feature_idx
+                cond = X[:,feature_idx]<best_threshold
+            
+        root = Node(feature_idx = best_feature_idx, threshold = best_threshold,
+                    left = Node(best_feature_idx), right = Node())
+        while depth < self.max_depth and n_samples >= self.min_samples_split:
+            ...
+            depth+=1
            
     def predict_proba(self, X):
         ...
