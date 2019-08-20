@@ -83,9 +83,12 @@ class DecisionTreeCustom(BaseEstimator):
             
         root = Node(feature_idx = best_feature_idx, threshold = best_threshold,
                     left = Node(best_feature_idx), right = Node())
-        while depth < self.max_depth and n_samples >= self.min_samples_split:
+        #recursive implementation
+        if depth < self.max_depth and n_samples >= self.min_samples_split:
             ...
             depth+=1
+            
+        return self
            
     def predict_proba(self, X):
         ...
