@@ -4,12 +4,8 @@ Created on Mon Jan 14 14:58:11 2019
 
 @author: Soriba
 """
-
-import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
 from sklearn.base import BaseEstimator
-from sklearn.metrics import accuracy_score
 
 def entropy(y):
     y=np.array(y)
@@ -29,27 +25,26 @@ def gini(y):
     return 1-np.sum(p**2) 
 
 
-def ig(X,j,threshold,criterion='gini'):
+def ig(X, y, feature_idx, threshold, criterion='gini'):
     """
     Information gain. Function to maximize to get the best split
     """
     X=np.array(X)
     #we split the data according to the threshold
-    Xleft=X[X[:,j]<threshold]
-    Xright=X[X[:,j]>=threshold]
+    cond = X[:,feature_idx]<threshold
+    y_left = y[cond]
+    y_right = y[~cond]
     #length of the origial data and length of each split
-    l=X.shape[0]
-    ll=Xleft.shape[0]
-    lr=Xright.shape[0]
+    l=len(y)
+    ll=len(y_left)
+    lr=len(y_right)
     
     if criterion=='gini':
-        return gini(X)-(ll/l)*gini(Xleft)-(lr/l)*gini(Xright)
+        return gini(y)-(ll/l)*gini(y_left)-(lr/l)*gini(y_right)
     elif criterion=='entropy':
-        return entropy(X)-(ll/l)*entropy(Xleft)-(lr/l)*entropy(Xright)
+        return entropy(y)-(ll/l)*entropy(y_left)-(lr/l)*entropy(y_right)
     
-
-#%% classes
-        
+     
 class Node():
     
     def __init__(self, feature_idx=0, threshold=0, left=None, right=None):
