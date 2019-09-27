@@ -1,2 +1,2 @@
 # Decison-Trees-implementation
-Decision Trees implementation in Python. In progress ...
+Decision Trees implementation in Python
